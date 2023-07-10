@@ -3,21 +3,6 @@ const { Schema: _Schema, model } = mongoose;
 const Schema = _Schema;
 
 
-const dressListSchema = new Schema(
-    {
-        dressId: {
-            type: String,
-            ref: 'dress',
-            unique: true,
-        },
-        measurementIdList: [{
-            type: String,
-            ref: 'measurement',
-        }],
-    },
-    { timestamps: true }
-);
-
 const orderSchema = new Schema(
     {
         orderId: {
@@ -25,12 +10,31 @@ const orderSchema = new Schema(
             unique: true,
         },
         customerId: {
-            type: String,
+            type: Schema.Types.ObjectId,
             ref: 'customer',
         },
         dressList: [{
-            type: dressListSchema,
+            type: Schema.Types.ObjectId,
+            ref: 'measurement',
         }],
+        orderStatus: {
+            type: String,
+            enum: ["pending", "in progress", "completed"],
+            default: "pending"
+        },
+        amount: {
+            type: Number,
+        },
+        paymentStatus: {
+            type: String,
+            enum: ["pending", "Paid"],
+            default: "pending"
+        },
+        paymentType: {
+            type: String,
+            enum: ["cod", "online"],
+            default: "cod"
+        },
         isActive: {
             type: Boolean,
             default: true,

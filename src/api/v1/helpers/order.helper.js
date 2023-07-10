@@ -1,10 +1,12 @@
+import { orderFormatter, updateOrderFormatter } from "../formatter/order.formatter.js";
 import orderModel from "../models/order.model.js"
 
 // CRUD operations
-export const createOder = async (orderData) => {
+export const createOrder = async (orderData) => {
   // Create operation
   try {
-    const Order = new orderModel(orderData);
+    const formattedData = orderFormatter(orderData)
+    const Order = new orderModel(formattedData);
     const savedOrder = await Order.save();
     return savedOrder;
   } catch (error) {
@@ -25,8 +27,19 @@ export const getAllOrders = async () => {
 export const updateOrder = async (orderId, updateData) => {
   // Update operation
   try {
-    const updatedOrder = await orderModel.findOneAndUpdate(orderId, updateData, { new: true });
+    const formattedData = updateOrderFormatter(updateData)
+    const updatedOrder = await orderModel.findOneAndUpdate({ orderId }, formattedData, { new: true });
     return updatedOrder;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const orderById = async (orderId) => {
+  // Delete operation
+  try {
+    const deletedOrder = await orderModel.findOne({ orderId });
+    return deletedOrder;
   } catch (error) {
     console.error(error);
   }
@@ -35,7 +48,7 @@ export const updateOrder = async (orderId, updateData) => {
 export const deleteOrder = async (orderId) => {
   // Delete operation
   try {
-    const deletedOrder = await orderModel.findOneAndDelete(orderId);
+    const deletedOrder = await orderModel.findOneAndDelete({ orderId });
     return deletedOrder;
   } catch (error) {
     console.error(error);

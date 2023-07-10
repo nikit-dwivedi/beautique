@@ -1,5 +1,5 @@
 import { Router, json } from 'express';
-import { createMeasurementAPI,getAllMeasurementsAPI,getMeasurementByIdAPI,updateMeasurementAPI } from '../controllers/measurement.controller.js';
+import { createMeasurementAPI,customerMeasurementByDressAPI,getAllMeasurementsAPI,getMeasurementByIdAPI,updateMeasurementAPI } from '../controllers/measurement.controller.js';
 const router = Router();
 
 
@@ -15,7 +15,7 @@ router.get('/:measurementId', getMeasurementByIdAPI);
 // Route to update a measurement's contact
 router.post('/:measurementId', updateMeasurementAPI);
 
-// Route to delete a measurement by ID
-// router.delete('/remove/:measurementId', deleteCustomerByIdAPI);
+// Route to get customer measurement by dress ID
+router.post('/dress/:customerId', customerMeasurementByDressAPI);
 
 export default router

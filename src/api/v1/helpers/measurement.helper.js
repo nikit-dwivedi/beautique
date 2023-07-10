@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { measurementFormatter } from "../formatter/measurement.formater.js";
 import measurementModel from "../models/measurement.model.js"
 
@@ -41,6 +42,29 @@ export const getMeasurementById = async (measurementId) => {
   // Read operation
   try {
     const measurements = await measurementModel.findOne({ measurementId })
+      .select("-_id -createdAt -updatedAt -configList._id -__v")
+      .populate({
+        path: "customerId",
+        select: "-_id -isActive -createdAt -updatedAt -__v"
+      })
+      .populate({
+        path: "dressId",
+        select: "-_id dressId name"
+      })
+      .populate({
+        path: "configList.configId",
+        select: "-_id configId name isUnit unit"
+      })
+    return measurements;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getCustomerMeasurementByDressId = async (customerId, dressId) => {
+  // Read operation
+  try {
+    const measurements = await measurementModel.find({ dressId, customerId })
       .select("-_id -createdAt -updatedAt -configList._id -__v")
       .populate({
         path: "customerId",
