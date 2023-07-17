@@ -32,8 +32,8 @@ const orderSchema = new Schema(
         },
         paymentType: {
             type: String,
-            enum: ["cod", "online"],
-            default: "cod"
+            enum: ["cash", "online"],
+            default: "cash"
         },
         isActive: {
             type: Boolean,

@@ -38,22 +38,23 @@ export const getAllMeasurements = async () => {
   }
 };
 
-export const getMeasurementById = async (measurementId) => {
+export const getMeasurementById = async (measurementId,need) => {
   // Read operation
+  let opt = need?"":"-_id"
   try {
     const measurements = await measurementModel.findOne({ measurementId })
-      .select("-_id -createdAt -updatedAt -configList._id -__v")
+      .select(`${opt} -createdAt -updatedAt -configList._id -__v `)
       .populate({
         path: "customerId",
-        select: "-_id -isActive -createdAt -updatedAt -__v"
+        select: `${opt} -isActive -createdAt -updatedAt -__v`
       })
       .populate({
         path: "dressId",
-        select: "-_id dressId name"
+        select: `${opt} dressId name`
       })
       .populate({
         path: "configList.configId",
-        select: "-_id configId name isUnit unit"
+        select: `${opt} configId name isUnit unit`
       })
     return measurements;
   } catch (error) {

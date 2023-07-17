@@ -1,31 +1,46 @@
-import { findCustomerById } from "../helpers/customer.helper.js";
+import { createCustomer, findCustomerById } from "../helpers/customer.helper.js";
 import { getDressById } from "../helpers/dress.helper.js";
+import { createMeasurements, getMeasurementById } from "../helpers/measurement.helper.js";
 import { createOrder, getAllOrders, orderById, updateOrder } from "../helpers/order.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
 
 // Function to create a new customer
 export async function createOrderAPI(req, res) {
     try {
-        let { customerId, dressId, configList, description, tag } = req.body
-        console.log(customerId, dressId, configList, description, tag);
-        const customerData = await findCustomerById(customerId, true)
-        customerId = customerData._id
-        const dressData = await getDressById(dressId, true)
-        dressId = dressData._id
-        let configError = false
-        const configMap = new Map(configList.map(configData => [configData.configId, configData.value]))
-        let newList = dressData.configIdList.map((config) => {
-            if (!configMap.get(config.configId)) {
-                configError = true
-                console.log(configMap.get(config.configId));
+        let { customerDetail, dressCollection, paymentData } = req.body
+        // console.log(customerId, dressId, configList, description, tag);
+        // if (!customerDetail.customerId) {
+        //     await createCustomer(customerDetail)
+        // }
+        let {_id:customerId} = customerDetail.customerId ? await findCustomerById(customerDetail.customerId, true) : await createCustomer(customerDetail)
+        let dressList = await Promise.all(dressCollection.map(async dress => {
+            const dressData = await getDressById(dress.dressId, true)
+            dress.dressId = dressData._id
+            dress.customerId = customerId
+            let configError = false
+            if (dress.measurementId === "") {
+                const configMap = new Map(dress.configList.map(configData => [configData.configId, configData.value]))
+                let configList = dressData.configIdList.map((config) => {
+                    if (!configMap.get(config.configId)) {
+                        configError = true
+                        console.log(configMap.get(config.configId));
+                    }
+                    return { configId: config._id, value: configMap.get(config.configId) }
+                })
+                dress.configList = configList
+                if (configError) {
+                    return badRequest(res, "please provide all order")
+                }
+                let newMeasurement = await createMeasurements(dress)
+                return newMeasurement.measurementId
             }
-            return { configId: config._id, value: configMap.get(config.configId) }
-        })
-        if (configError) {
-            return badRequest(res, "please provide all order")
-        }
-        configList = newList
-        let orderData = { customerId, dressId, configList, description, tag }
+            let newMeasurement = await getMeasurementById(dress.measurementId,true)
+            return newMeasurement._id
+        }))
+
+        let orderData = { customerId, dressList, ...paymentData }
+        console.log(orderData);
+        
         const order = await createOrder(orderData);
         return success(res, "order Added")
     } catch (error) {
