@@ -32,7 +32,7 @@ export async function createOrderAPI(req, res) {
                     return badRequest(res, "please provide all order")
                 }
                 let newMeasurement = await createMeasurements(dress)
-                return newMeasurement.measurementId
+                return newMeasurement._id
             }
             let newMeasurement = await getMeasurementById(dress.measurementId,true)
             return newMeasurement._id

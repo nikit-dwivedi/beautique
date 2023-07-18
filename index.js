@@ -4,7 +4,7 @@ import {config} from "dotenv";
 import { readFileSync } from 'fs';
 import { createServer as createHttpsServer } from 'https';
 config()
-const port = process.env.PORT||9000;
+const port = process.env.PORT||7089;
 const sPort = process.env.SPORT||7889;
 
 var privateKey  = readFileSync('sslcert/server.key', 'utf8');
