@@ -14,10 +14,28 @@ export const createOrder = async (orderData) => {
   }
 };
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (need) => {
+  let opt = need ? "" : "-_id"
   // Read operation
   try {
-    const Orders = await orderModel.find();
+    const Orders = await orderModel.find()
+      .select(`${opt} -createdAt -updatedAt -__v `)
+      .populate({
+        path: "customerId",
+        select: `${opt} -isActive -createdAt -updatedAt -__v`
+      })
+      .populate({
+        path: "dressList",
+        populate: {
+          path: 'dressId configList.configId',
+          select: `${opt} dressId name isUnit configId unit`,
+        },
+        select: `${opt} -__v`,
+      })
+      .populate({
+        path: "dressList.dressId",
+        select: `${opt} -__v`
+      })
     return Orders;
   } catch (error) {
     console.error(error);
