@@ -1,6 +1,6 @@
 import { findCustomerById } from "../helpers/customer.helper.js";
 import { getDressById } from "../helpers/dress.helper.js";
-import { createMeasurements, getAllMeasurements, updateMeasurement, getMeasurementById, getCustomerMeasurementByDressId } from "../helpers/measurement.helper.js";
+import { createMeasurements, getAllMeasurements, updateMeasurement, getMeasurementById, getCustomerMeasurementByDressId, getCustomerMeasurement } from "../helpers/measurement.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
 
 // Function to create a new customer
@@ -59,7 +59,18 @@ export async function customerMeasurementByDressAPI(req, res) {
         const { _id:cId } = await findCustomerById(req.params.customerId, true)
         const { _id:dId } = await getDressById(req.body.dressId, true)
         const measurement = await getCustomerMeasurementByDressId(cId, dId);
-        return measurement ? success(res, "measurement details", measurement) : badRequest(res, 'measurement not found');
+        return measurement ? success(res, "measurement list", measurement) : badRequest(res, 'measurement not found');
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+// Function to get a measurement by ID
+export async function customerMeasurementsAPI(req, res) {
+    try {
+        const { _id:cId } = await findCustomerById(req.params.customerId, true)
+        const measurement = await getCustomerMeasurement(cId);
+        return measurement ? success(res, "measurement list", measurement) : badRequest(res, 'measurement not found');
     } catch (error) {
         return badRequest(res, error.message)
     }

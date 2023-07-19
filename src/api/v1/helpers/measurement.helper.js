@@ -38,9 +38,9 @@ export const getAllMeasurements = async () => {
   }
 };
 
-export const getMeasurementById = async (measurementId,need) => {
+export const getMeasurementById = async (measurementId, need) => {
   // Read operation
-  let opt = need?"":"-_id"
+  let opt = need ? "" : "-_id"
   try {
     const measurements = await measurementModel.findOne({ measurementId })
       .select(`${opt} -createdAt -updatedAt -configList._id -__v `)
@@ -66,6 +66,29 @@ export const getCustomerMeasurementByDressId = async (customerId, dressId) => {
   // Read operation
   try {
     const measurements = await measurementModel.find({ dressId, customerId })
+      .select("-_id -createdAt -updatedAt -configList._id -__v")
+      .populate({
+        path: "customerId",
+        select: "-_id -isActive -createdAt -updatedAt -__v"
+      })
+      .populate({
+        path: "dressId",
+        select: "-_id dressId name"
+      })
+      .populate({
+        path: "configList.configId",
+        select: "-_id configId name isUnit unit"
+      })
+    return measurements;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getCustomerMeasurement = async (customerId) => {
+  // Read operation
+  try {
+    const measurements = await measurementModel.find({ customerId })
       .select("-_id -createdAt -updatedAt -configList._id -__v")
       .populate({
         path: "customerId",
