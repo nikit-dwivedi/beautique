@@ -11,7 +11,7 @@ const measurementConfigSchema = new Schema({
         type: String
     },
     isUnit: {
-        type: String
+        type: Boolean
     },
     unit: {
         type: String,
