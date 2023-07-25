@@ -18,7 +18,7 @@ export const createDress = async (dressData) => {
 export const getAllDresses = async () => {
   // Read operation
   try {
-    const dresses = await dressModel.find().select("-_id dressId name configIdList").populate({ path: "configIdList", select: "-_id configId name isUnit unit" })
+    const dresses = await dressModel.find().select("-_id dressId price name configIdList").populate({ path: "configIdList", select: "-_id configId name isUnit unit" })
     return dresses;
   } catch (error) {
     console.error(error);
@@ -28,7 +28,7 @@ export const getAllDresses = async () => {
 export const getDressById = async (dressId, need) => {
   // Read operation
   try {
-    const selectString1 = need ? "dressId name configIdList" : "-_id dressId name configIdList"
+    const selectString1 = need ? "dressId name price configIdList" : "-_id dressId price name configIdList"
     const selectString2 = need ? "configId name isUnit unit" : "-_id configId name isUnit unit"
     const dresses = await dressModel.findOne({ dressId }).select(selectString1).populate({ path: "configIdList", select: selectString2 })
     return dresses;
