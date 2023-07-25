@@ -16,6 +16,9 @@ const dressSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'measurementConfig',
     }],
+    price: {
+      type: Number,
+    },
     isActive: {
       type: Boolean,
       default: true,
