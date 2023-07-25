@@ -28,7 +28,7 @@ export const getAllOrders = async (need) => {
         path: "dressList",
         populate: {
           path: 'dressId configList.configId',
-          select: `${opt} dressId name isUnit configId unit`,
+          select: `${opt} dressId price name isUnit configId unit`,
         },
         select: `${opt} -__v`,
       })
