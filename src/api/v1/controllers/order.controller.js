@@ -39,7 +39,7 @@ export async function createOrderAPI(req, res) {
             let newMeasurement = await getMeasurementById(dress.measurementId, true)
             return newMeasurement._id
         }))
-        paymentData.amountRemaining = amount - paymentData.amountPaid
+        paymentData.amountRemaining = paymentData.amount - paymentData.amountPaid
         let orderData = { customerId, dressList, ...paymentData }
         console.log(orderData);
 
