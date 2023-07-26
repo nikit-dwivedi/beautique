@@ -12,6 +12,7 @@ export const createDress = async (dressData) => {
     return savedDress;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -22,6 +23,7 @@ export const getAllDresses = async () => {
     return dresses;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -34,6 +36,7 @@ export const getDressById = async (dressId, need) => {
     return dresses;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -45,6 +48,7 @@ export const updateDress = async (dressId, updateData) => {
     return updatedDress;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -55,5 +59,6 @@ export const deleteDress = async (dressId) => {
     return deletedDress;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };

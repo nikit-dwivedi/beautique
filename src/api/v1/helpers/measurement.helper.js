@@ -12,6 +12,7 @@ export const createMeasurements = async (measurementData) => {
     return savedMeasurement;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -35,6 +36,7 @@ export const getAllMeasurements = async () => {
     return measurements;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -59,6 +61,7 @@ export const getMeasurementById = async (measurementId, need) => {
     return measurements;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -82,6 +85,7 @@ export const getCustomerMeasurementByDressId = async (customerId, dressId) => {
     return measurements;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -105,6 +109,7 @@ export const getCustomerMeasurement = async (customerId) => {
     return measurements;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -115,6 +120,7 @@ export const updateMeasurement = async (measurementId, updateData) => {
     return updatedMeasurement;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -125,5 +131,6 @@ export const deleteMeasurement = async (measurementId) => {
     return deletedMeasurement;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };

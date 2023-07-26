@@ -12,11 +12,13 @@ export async function createOrderAPI(req, res) {
         // if (!customerDetail.customerId) {
         //     await createCustomer(customerDetail)
         // }
-        let {_id:customerId} = customerDetail.customerId ? await findCustomerById(customerDetail.customerId, true) : await createCustomer(customerDetail)
+        let { _id: customerId } = customerDetail.customerId ? await findCustomerById(customerDetail.customerId, true) : await createCustomer(customerDetail)
+        paymentData.amount = 0
         let dressList = await Promise.all(dressCollection.map(async dress => {
             const dressData = await getDressById(dress.dressId, true)
             dress.dressId = dressData._id
             dress.customerId = customerId
+            paymentData.amount += dress.price
             let configError = false
             if (dress.measurementId === "") {
                 const configMap = new Map(dress.configList.map(configData => [configData.configId, configData.value]))
@@ -34,13 +36,13 @@ export async function createOrderAPI(req, res) {
                 let newMeasurement = await createMeasurements(dress)
                 return newMeasurement._id
             }
-            let newMeasurement = await getMeasurementById(dress.measurementId,true)
+            let newMeasurement = await getMeasurementById(dress.measurementId, true)
             return newMeasurement._id
         }))
-
+        paymentData.amountRemaining = amount - paymentData.amountPaid
         let orderData = { customerId, dressList, ...paymentData }
         console.log(orderData);
-        
+
         const order = await createOrder(orderData);
         return success(res, "order Added")
     } catch (error) {

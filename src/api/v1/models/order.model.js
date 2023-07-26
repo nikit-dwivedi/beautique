@@ -25,6 +25,12 @@ const orderSchema = new Schema(
         amount: {
             type: Number,
         },
+        amountPaid: {
+            type: Number
+        },
+        amountRemaining: {
+            type: Number
+        },
         paymentStatus: {
             type: String,
             enum: ["pending", "Paid"],

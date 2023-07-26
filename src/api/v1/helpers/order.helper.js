@@ -11,6 +11,7 @@ export const createOrder = async (orderData) => {
     return savedOrder;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -39,6 +40,7 @@ export const getAllOrders = async (need) => {
     return Orders;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -50,6 +52,7 @@ export const updateOrder = async (orderId, updateData) => {
     return updatedOrder;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -60,6 +63,7 @@ export const orderById = async (orderId) => {
     return deletedOrder;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };
 
@@ -70,5 +74,6 @@ export const deleteOrder = async (orderId) => {
     return deletedOrder;
   } catch (error) {
     console.error(error);
+    throw new Error(error.message)
   }
 };

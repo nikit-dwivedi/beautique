@@ -9,7 +9,7 @@ export async function createCustomer(customerData) {
     return customer;
   } catch (error) {
     console.error("Error creating customer:", error);
-    throw error;
+    throw new Error(error.message)
   }
 }
 
@@ -19,7 +19,7 @@ export async function getAllCustomers() {
     return customers;
   } catch (error) {
     console.error("Error retrieving customers:", error);
-    throw error;
+    throw new Error(error.message)
   }
 }
 
@@ -31,7 +31,7 @@ export async function findCustomerById(customerId, need) {
     return customer;
   } catch (error) {
     console.error("Error finding customer:", error);
-    throw error;
+    throw new Error(error.message)
   }
 }
 
@@ -42,7 +42,7 @@ export async function deleteCustomerById(customerId) {
     return deletedCustomer;
   } catch (error) {
     console.error("Error deleting customer:", error);
-    throw error;
+    throw new Error(error.message)
   }
 }
 
@@ -54,6 +54,6 @@ export async function updateCustomerContact(customerId, updatedData) {
     return updatedCustomer;
   } catch (error) {
     console.error("Error updating customer:", error);
-    throw error;
+    throw new Error(error.message)
   }
 }
