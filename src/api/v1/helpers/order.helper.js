@@ -137,7 +137,37 @@ export async function thisMonthAmount() {
     if (result.length > 0) {
       return result[0].totalAmount;
     } else {
-      return 0; 
+      return 0;
+    }
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw new Error(error.message)
+  }
+}
+
+export async function thisMonthPendingAmount() {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
+    const result = await orderModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startOfMonth, $lte: endOfMonth }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amountRemaining" }
+        }
+      }
+    ]);
+
+    if (result.length > 0) {
+      return result[0].totalAmount;
+    } else {
+      return 0;
     }
   } catch (error) {
     console.error("Error updating customer:", error);
