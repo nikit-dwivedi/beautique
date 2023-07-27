@@ -8,7 +8,7 @@ export async function getHomeData(req,res) {
         const saleCount = await thisMonthOrderList()
         const revenueCount = await thisMonthAmount()
         const pendingAmount = await thisMonthPendingAmount()
-        return success(res,"this month data",{ customerCount, saleCount, revenueCount })
+        return success(res,"this month data",{ customerCount, saleCount, revenueCount ,pendingAmount})
     } catch (error) {
         return badRequest(res, error.message)
     }
