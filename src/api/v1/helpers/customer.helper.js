@@ -57,3 +57,18 @@ export async function updateCustomerContact(customerId, updatedData) {
     throw new Error(error.message)
   }
 }
+
+export async function thisMonthCustomerList() {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
+    const customers = await customerModel.count({
+      createdAt: { $gte: startOfMonth, $lte: endOfMonth }
+    });
+    return customers;
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw new Error(error.message)
+  }
+}

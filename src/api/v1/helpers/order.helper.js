@@ -47,8 +47,8 @@ export const getAllOrders = async (need) => {
 export const updateOrderPayment = async (orderId, updateData) => {
   // Update operation
   try {
-    const orderData = await orderModel.findOne({orderId}).select("-_id amountPaid amountRemaining")
-    const formattedData = updateOrderFormatter(updateData,orderData)
+    const orderData = await orderModel.findOne({ orderId }).select("-_id amountPaid amountRemaining")
+    const formattedData = updateOrderFormatter(updateData, orderData)
     const updatedOrder = await orderModel.findOneAndUpdate({ orderId }, formattedData, { new: true });
     return updatedOrder;
   } catch (error) {
@@ -98,3 +98,49 @@ export const deleteOrder = async (orderId) => {
     throw new Error(error.message)
   }
 };
+
+
+export async function thisMonthOrderList() {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
+    const order = await orderModel.count({
+      createdAt: { $gte: startOfMonth, $lte: endOfMonth }
+    });
+    return order;
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw new Error(error.message)
+  }
+}
+
+export async function thisMonthAmount() {
+  try {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
+    const result = await orderModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startOfMonth, $lte: endOfMonth }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amount" }
+        }
+      }
+    ]);
+
+    if (result.length > 0) {
+      return result[0].totalAmount;
+    } else {
+      return 0; 
+    }
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw new Error(error.message)
+  }
+}
