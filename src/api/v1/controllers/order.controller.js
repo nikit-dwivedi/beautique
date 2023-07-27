@@ -1,7 +1,7 @@
 import { createCustomer, findCustomerById } from "../helpers/customer.helper.js";
 import { getDressById } from "../helpers/dress.helper.js";
 import { createMeasurements, getMeasurementById } from "../helpers/measurement.helper.js";
-import { createOrder, getAllOrders, orderById, updateOrder } from "../helpers/order.helper.js";
+import { createOrder, getAllOrders, orderById, updateOrderPayment, updateOrderStatus } from "../helpers/order.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
 
 // Function to create a new customer
@@ -71,14 +71,24 @@ export async function getOrderByIdAPI(req, res) {
 }
 
 // Function to update a order
-export async function updateOrderAPI(req, res) {
+export async function updateOrderPaymentAPI(req, res) {
     try {
-        const updatedOrder = await updateOrder(req.params.orderId, req.body);
+        const updatedOrder = await updateOrderPayment(req.params.orderId, req.body);
         return updatedOrder ? success(res, "order updated") : badRequest(res, 'order not found');
     } catch (error) {
         return badRequest(res, error.message)
     }
 }
+
+export async function updateOrderStatusAPI(req, res) {
+    try {
+        const updatedOrder = await updateOrderStatus(req.params.orderId);
+        return updatedOrder ? success(res, "order updated") : badRequest(res, 'order not found');
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+updateOrderStatus
 
 // Function to delete a order by ID
 export async function deleteOrderByIdAPI(req, res) {

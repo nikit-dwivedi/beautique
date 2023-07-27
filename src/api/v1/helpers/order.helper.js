@@ -44,12 +44,33 @@ export const getAllOrders = async (need) => {
   }
 };
 
-export const updateOrder = async (orderId, updateData) => {
+export const updateOrderPayment = async (orderId, updateData) => {
   // Update operation
   try {
-    const formattedData = updateOrderFormatter(updateData)
+    const orderData = await orderModel.findOne({orderId}).select("-_id amountPaid amountRemaining")
+    const formattedData = updateOrderFormatter(updateData,orderData)
     const updatedOrder = await orderModel.findOneAndUpdate({ orderId }, formattedData, { new: true });
     return updatedOrder;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message)
+  }
+};
+
+export const updateOrderStatus = async (orderId) => {
+  // Update operation
+  try {
+    let updatedOrder = await orderModel.findOne({ orderId }).select("-_id orderStatus").lean()
+    switch (updatedOrder.orderStatus) {
+      case 'pending':
+        updatedOrder = await orderModel.findOneAndUpdate({ orderId }, { orderStatus: "in progress" })
+        return updatedOrder;
+      case 'in progress':
+        updatedOrder = await orderModel.findOneAndUpdate({ orderId }, { orderStatus: "completed" })
+        return updatedOrder;
+      default:
+        throw new Error("Can't change Status")
+    }
   } catch (error) {
     console.error(error);
     throw new Error(error.message)

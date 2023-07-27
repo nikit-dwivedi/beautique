@@ -1,21 +1,21 @@
 import { Router, json } from 'express';
-import { createOrderAPI,getAllOrdersAPI } from '../controllers/order.controller.js';
+import { createOrderAPI,getAllOrdersAPI, updateOrderPaymentAPI, updateOrderStatusAPI } from '../controllers/order.controller.js';
 const router = Router();
 
 
-// Route to create a new measurement
+// Route to create a new order
 router.post('/', createOrderAPI);
 
-// Route to get all measurements
+// Route to get all orders
 router.get('/', getAllOrdersAPI);
 
-// Route to get a measurement by ID
-// router.get('/:measurementId', getMeasurementByIdAPI);
+// Route to get a order by ID
+// router.get('/:orderId', getorderByIdAPI);
 
-// // Route to update a measurement's contact
-// router.post('/:measurementId', updateMeasurementAPI);
+// Route to update a order's status
+router.post('/status/:orderId', updateOrderStatusAPI);
 
-// // Route to get customer measurement by dress ID
-// router.post('/dress/:customerId', customerMeasurementByDressAPI);
+// Route to update a order's payment status
+router.post('/payment/:orderId', updateOrderPaymentAPI);
 
 export default router
