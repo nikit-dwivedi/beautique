@@ -6,9 +6,11 @@ import configRouter from "./routes/config.route.js";
 import measurementRouter from "./routes/measurement.route.js";
 import orderRouter from "./routes/order.route.js";
 import homeRouter from "./routes/home.route.js";
+import adminRouter from "./routes/admin.route.js";
 
 router.use("/home",homeRouter)
 router.use("/customer", customerRouter)
+router.use("/admin", adminRouter)
 router.use("/config", configRouter)
 router.use("/measurement", measurementRouter)
 router.use("/order", orderRouter)
