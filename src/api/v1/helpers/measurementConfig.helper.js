@@ -76,7 +76,7 @@ export async function updateMeasurementConfig(configId, updateData) {
 // Delete a measurement config
 export async function deleteMeasurementConfig(configId) {
     try {
-        const deletedConfig = await measurementConfigModel.findOneAndUpdate({ configId }, { isActive: true });
+        const deletedConfig = await measurementConfigModel.findOneAndUpdate({ configId }, { isActive: false });
         return deletedConfig;
     } catch (error) {
         console.error(error);

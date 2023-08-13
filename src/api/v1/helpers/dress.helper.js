@@ -65,7 +65,7 @@ export const updateDress = async (dressId, updateData) => {
 export const deleteDress = async (dressId) => {
   // Delete operation
   try {
-    const deletedDress = await dressModel.findOneAndUpdate({dressId},{ isActive: true });
+    const deletedDress = await dressModel.findOneAndUpdate({dressId},{ isActive: false });
     return deletedDress;
   } catch (error) {
     console.error(error);

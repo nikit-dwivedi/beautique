@@ -38,7 +38,7 @@ export async function findCustomerById(customerId, need) {
 
 export async function deleteCustomerById(customerId) {
   try {
-    const deletedCustomer = await customerModel.findOneAndUpdate({ customerId }, { isActive: true });
+    const deletedCustomer = await customerModel.findOneAndUpdate({ customerId }, { isActive: false });
     return deletedCustomer;
   } catch (error) {
     console.error("Error deleting customer:", error);

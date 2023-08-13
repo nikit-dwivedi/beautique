@@ -50,7 +50,7 @@ export async function deleteCustomerByIdAPI(req, res) {
     if (!deletedCustomer) {
       badRequest(res, 'Customer not found');
     }
-    success(res,"order of customer",deletedCustomer)
+    success(res,"Customer deleted",deletedCustomer)
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete customer' });
   }
