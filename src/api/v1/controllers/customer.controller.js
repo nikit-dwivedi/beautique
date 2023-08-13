@@ -1,4 +1,5 @@
 import { createCustomer, deleteCustomerById, findCustomerById, getAllCustomers, updateCustomerContact } from "../helpers/customer.helper.js";
+import { orderOfCustomer } from "../helpers/order.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
 
 // Function to create a new customer
@@ -44,12 +45,12 @@ export async function updateCustomerContactAPI(req, res) {
 // Function to delete a customer by ID
 export async function deleteCustomerByIdAPI(req, res) {
   try {
+
     const deletedCustomer = await deleteCustomerById(req.params.customerId);
-    if (deletedCustomer) {
-      res.json(deletedCustomer);
-    } else {
-      res.status(404).json({ error: 'Customer not found' });
+    if (!deletedCustomer) {
+      badRequest(res, 'Customer not found');
     }
+    success(res,"order of customer",deletedCustomer)
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete customer' });
   }

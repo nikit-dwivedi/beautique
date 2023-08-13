@@ -1,5 +1,5 @@
-import { createMeasurementConfig, deleteMeasurementConfig, getAllMeasurementConfigs, updateMeasurementConfig, getMeasurementConfigById, configListCheck } from "../helpers/measurementConfig.helper.js";
-import { createDress, deleteDress, getAllDresses, getDressById, updateDress } from "../helpers/dress.helper.js";
+import { createMeasurementConfig, deleteMeasurementConfig, getAllMeasurementConfigs, updateMeasurementConfig, getMeasurementConfigById, configListCheck, getMeasurementConfigByName } from "../helpers/measurementConfig.helper.js";
+import { createDress, deleteDress, getAllDresses, getDressById, getDressByName, updateDress } from "../helpers/dress.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
 
 
@@ -7,6 +7,10 @@ import { badRequest, success } from "../helpers/response.helper.js";
 
 export async function addMeasurementConfig(req, res) {
     try {
+        const nameCheck = await getMeasurementConfigByName(req.body.name)
+        if (nameCheck) {
+            return badRequest(res, "Measurement already exist")
+        }
         const measurementConfig = await createMeasurementConfig(req.body);
         return success(res, "Measurement Added")
     } catch (error) {
@@ -34,6 +38,10 @@ export async function getMeasurementById(req, res) {
 
 export async function changeMeasurementConfig(req, res) {
     try {
+        const nameCheck = await getMeasurementConfigByName(req.body.name)
+        if (nameCheck && nameCheck.configId != req.params.configId) {
+            return badRequest(res, "Measurement already exist")
+        }
         const updatedMeasurement = await updateMeasurementConfig(
             req.params.configId,
             req.body
@@ -46,14 +54,10 @@ export async function changeMeasurementConfig(req, res) {
 
 export async function removeMeasurementConfig(req, res) {
     try {
-        const deletedCustomer = await deleteMeasurementConfig(req.params.customerId);
-        if (deletedCustomer) {
-            res.json(deletedCustomer);
-        } else {
-            res.status(404).json({ error: 'Customer not found' });
-        }
+        const deletedMeasurement = await deleteMeasurementConfig(req.params.configId);
+        return deletedMeasurement ? success(res, "Measurement config Deleted") : badRequest(res, 'Measurement config not found');
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete customer' });
+        res.status(500).json({ error: 'Failed to delete Measurement' });
     }
 }
 
@@ -63,6 +67,10 @@ export async function removeMeasurementConfig(req, res) {
 
 export async function addNewDress(req, res) {
     try {
+        const nameCheck = await getDressByName(req.body.name)
+        if (nameCheck) {
+            return badRequest(res, "dress already exist")
+        }
         const filterList = await configListCheck(req.body.configIdList)
         if (!filterList[0]) {
             return badRequest(res, "invalid measurement config")
@@ -95,8 +103,21 @@ export async function getDress(req, res) {
 
 export async function editDress(req, res) {
     try {
+        const nameCheck = await getDressByName(req.body.name)
+        if (nameCheck && nameCheck.dressId != req.params.dressId) {
+            return badRequest(res, "Measurement already exist")
+        }
         const dress = await updateDress(req.params.dressId, req.body);
         return dress ? success(res, "Dress updated") : badRequest(res, 'Dress not found');
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+export async function removeDress(req, res) {
+    try {
+        const dress = await deleteDress(req.params.dressId);
+        return dress ? success(res, "Dress deleted") : badRequest(res, 'Dress not found');
     } catch (error) {
         return badRequest(res, error.message)
     }

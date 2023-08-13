@@ -17,6 +17,6 @@ router.get('/:customerId', getCustomerByIdAPI);
 router.post('/:customerId', updateCustomerContactAPI);
 
 // Route to delete a customer by ID
-router.delete('/remove/:customerId', deleteCustomerByIdAPI);
+router.get('/remove/:customerId', deleteCustomerByIdAPI);
 
 export default router

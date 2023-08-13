@@ -15,7 +15,7 @@ export async function createCustomer(customerData) {
 
 export async function getAllCustomers() {
   try {
-    const customers = await customerModel.find().select("-_id customerId name contact altContact mail");
+    const customers = await customerModel.find({ isActive: true }).select("-_id customerId name contact altContact mail");
     return customers;
   } catch (error) {
     console.error("Error retrieving customers:", error);
@@ -27,7 +27,7 @@ export async function getAllCustomers() {
 export async function findCustomerById(customerId, need) {
   try {
     let selectString = need ? "customerId name contact altContact mail" : "-_id customerId name contact altContact mail"
-    const customer = await customerModel.findOne({ customerId }).select(selectString);
+    const customer = await customerModel.findOne({ customerId }, { isActive: true }).select(selectString);
     return customer;
   } catch (error) {
     console.error("Error finding customer:", error);
@@ -38,7 +38,7 @@ export async function findCustomerById(customerId, need) {
 
 export async function deleteCustomerById(customerId) {
   try {
-    const deletedCustomer = await customerModel.findOneAndDelete({ customerId });
+    const deletedCustomer = await customerModel.findOneAndUpdate({ customerId }, { isActive: true });
     return deletedCustomer;
   } catch (error) {
     console.error("Error deleting customer:", error);
@@ -63,9 +63,7 @@ export async function thisMonthCustomerList() {
     const currentDate = new Date();
     const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
-    const customers = await customerModel.count({
-      createdAt: { $gte: startOfMonth, $lte: endOfMonth }
-    });
+    const customers = await customerModel.count({ createdAt: { $gte: startOfMonth, $lte: endOfMonth }, isActive: true });
     return customers;
   } catch (error) {
     console.error("Error updating customer:", error);

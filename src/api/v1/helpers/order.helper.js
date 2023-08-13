@@ -88,6 +88,15 @@ export const orderById = async (orderId) => {
   }
 };
 
+export const orderOfCustomer = async (customerId) => {
+  try {
+    const orderList = await orderModel.find({ customerId })
+    return orderList
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
+
 export const deleteOrder = async (orderId) => {
   // Delete operation
   try {

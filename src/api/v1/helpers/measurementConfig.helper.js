@@ -15,10 +15,22 @@ export async function createMeasurementConfig(configData) {
     }
 };
 
+// Read measurement config by name
+export async function getMeasurementConfigByName(name) {
+    try {
+        const configData = await measurementConfigModel.findOne({ name, isActive: true })
+        return configData
+    } catch (error) {
+        // Handle error
+        console.error(error);
+        throw new Error(error.message)
+    }
+}
+
 // Read measurement config by Id
 export async function getMeasurementConfigById(configId) {
     try {
-        const updatedConfig = await measurementConfigModel.findOne({ configId }).select("-_id configId name isUnit unit");
+        const updatedConfig = await measurementConfigModel.findOne({ configId, isActive: true }).select("-_id configId name isUnit unit");
         return updatedConfig;
     } catch (error) {
         console.error(error);
@@ -29,7 +41,7 @@ export async function getMeasurementConfigById(configId) {
 // Filter measurement configs
 export async function configListCheck(IdList) {
     try {
-        const measurementConfigs = await measurementConfigModel.find({ configId: IdList }).select("configId").lean()
+        const measurementConfigs = await measurementConfigModel.find({ configId: IdList, isActive: true }).select("configId").lean()
         const filteredList = measurementConfigs.map(measurementConfig => measurementConfig._id)
         return filteredList;
     } catch (error) {
@@ -41,7 +53,7 @@ export async function configListCheck(IdList) {
 // Read all measurement configs
 export async function getAllMeasurementConfigs() {
     try {
-        const measurementConfigs = await measurementConfigModel.find().select("-_id configId name isUnit unit");
+        const measurementConfigs = await measurementConfigModel.find({ isActive: true }).select("-_id configId name isUnit unit");
         return measurementConfigs;
     } catch (error) {
         console.error(error);
@@ -64,7 +76,7 @@ export async function updateMeasurementConfig(configId, updateData) {
 // Delete a measurement config
 export async function deleteMeasurementConfig(configId) {
     try {
-        const deletedConfig = await measurementConfigModel.findOneAndDelete(configId);
+        const deletedConfig = await measurementConfigModel.findOneAndUpdate({ configId }, { isActive: true });
         return deletedConfig;
     } catch (error) {
         console.error(error);

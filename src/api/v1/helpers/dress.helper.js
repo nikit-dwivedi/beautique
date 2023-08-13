@@ -19,11 +19,21 @@ export const createDress = async (dressData) => {
 export const getAllDresses = async () => {
   // Read operation
   try {
-    const dresses = await dressModel.find().select("-_id dressId price name configIdList").populate({ path: "configIdList", select: "-_id configId name isUnit unit" })
+    const dresses = await dressModel.find({ isActive: true }).select("-_id dressId price name configIdList").populate({ path: "configIdList", select: "-_id configId name isUnit unit" })
     return dresses;
   } catch (error) {
     console.error(error);
     throw new Error(error.message)
+  }
+};
+
+export async function getDressByName(name) {
+  try {
+      const dressData = await dressModel.findOne({ name, isActive: true })
+      return dressData;
+  } catch (error) {
+      console.error(error);
+      throw new Error(error.message)
   }
 };
 
@@ -32,7 +42,7 @@ export const getDressById = async (dressId, need) => {
   try {
     const selectString1 = need ? "dressId name price configIdList" : "-_id dressId price name configIdList"
     const selectString2 = need ? "configId name isUnit unit" : "-_id configId name isUnit unit"
-    const dresses = await dressModel.findOne({ dressId }).select(selectString1).populate({ path: "configIdList", select: selectString2 })
+    const dresses = await dressModel.findOne({ dressId, isActive: true }).select(selectString1).populate({ path: "configIdList", select: selectString2 })
     return dresses;
   } catch (error) {
     console.error(error);
@@ -55,7 +65,7 @@ export const updateDress = async (dressId, updateData) => {
 export const deleteDress = async (dressId) => {
   // Delete operation
   try {
-    const deletedDress = await dressModel.findOneAndDelete(dressId);
+    const deletedDress = await dressModel.findOneAndUpdate({dressId},{ isActive: true });
     return deletedDress;
   } catch (error) {
     console.error(error);

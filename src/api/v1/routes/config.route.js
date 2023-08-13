@@ -1,6 +1,6 @@
 import { Router, json } from 'express';
 const router = Router();
-import { addMeasurementConfig, getAllMeasurementConfig, changeMeasurementConfig, getMeasurementById, addNewDress, getAllDress, getDress, editDress } from '../controllers/config.controller.js';
+import { addMeasurementConfig, getAllMeasurementConfig, changeMeasurementConfig, getMeasurementById, addNewDress, getAllDress, getDress, editDress, removeMeasurementConfig, removeDress } from '../controllers/config.controller.js';
 
 
 // -----------------------------------------------------------------Measurement config Routes----------------------------------------------------------------- //
@@ -18,7 +18,7 @@ router.get('/measurement/:configId', getMeasurementById);
 router.post('/measurement/:configId', changeMeasurementConfig);
 
 // Route to delete a measurement config by ID
-// router.delete('/remove/:customerId', deleteCustomerByIdAPI);
+router.get('/measurement/remove/:configId', removeMeasurementConfig);
 
 
 // -----------------------------------------------------------------Dress Routes----------------------------------------------------------------- //
@@ -35,7 +35,7 @@ router.get('/dress/:dressId', getDress);
 // Route to update a dress
 router.post('/dress/:dressId', editDress);
 
-
-
+// Route to delete a dress by ID
+router.get('/dress/remove/:dressId', removeDress);
 
 export default router
