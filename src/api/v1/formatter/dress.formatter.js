@@ -6,6 +6,6 @@ export function dressFormatter(dressData) {
     return { dressId, name, configIdList, price }
 }
 export function updateDressFormatter(dressData) {
-    let { name } = dressData
-    return { name }
+    let { name,configIdList, price  } = dressData
+    return { name,configIdList, price  }
 }
