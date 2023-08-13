@@ -107,6 +107,11 @@ export async function editDress(req, res) {
         if (nameCheck && nameCheck.dressId != req.params.dressId) {
             return badRequest(res, "Measurement already exist")
         }
+        const filterList = await configListCheck(req.body.configIdList)
+        if (!filterList[0]) {
+            return badRequest(res, "invalid measurement config")
+        }
+        req.body.configIdList = filterList
         const dress = await updateDress(req.params.dressId, req.body);
         return dress ? success(res, "Dress updated") : badRequest(res, 'Dress not found');
     } catch (error) {
