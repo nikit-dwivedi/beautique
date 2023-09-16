@@ -1,6 +1,6 @@
 import { Router, json } from 'express';
 const router = Router();
-import { addMeasurementConfig, getAllMeasurementConfig, changeMeasurementConfig, getMeasurementById, addNewDress, getAllDress, getDress, editDress, removeMeasurementConfig, removeDress } from '../controllers/config.controller.js';
+import { addMeasurementConfig, getAllMeasurementConfig, changeMeasurementConfig, getMeasurementById, addNewDress, getAllDress, getDress, editDress, removeMeasurementConfig, removeDress, addMaterial, getAllMaterial, getMaterialDataById, changeMaterial, removeMaterial } from '../controllers/config.controller.js';
 
 
 // -----------------------------------------------------------------Measurement config Routes----------------------------------------------------------------- //
@@ -37,5 +37,24 @@ router.post('/dress/:dressId', editDress);
 
 // Route to delete a dress by ID
 router.get('/dress/remove/:dressId', removeDress);
+
+
+// -----------------------------------------------------------------Material Routes----------------------------------------------------------------- //
+
+// Route to create a new material
+router.post('/material', addMaterial);
+
+// Route to get all material
+router.get('/material', getAllMaterial);
+
+// Route to get a material by ID
+router.get('/material/:materialId', getMaterialDataById);
+
+// Route to update a material
+router.post('/material/:materialId', changeMaterial);
+
+// Route to delete a material by ID
+router.get('/material/remove/:materialId', removeMaterial);
+
 
 export default router

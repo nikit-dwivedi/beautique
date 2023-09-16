@@ -1,6 +1,7 @@
 import { createMeasurementConfig, deleteMeasurementConfig, getAllMeasurementConfigs, updateMeasurementConfig, getMeasurementConfigById, configListCheck, getMeasurementConfigByName } from "../helpers/measurementConfig.helper.js";
 import { createDress, deleteDress, getAllDresses, getDressById, getDressByName, updateDress } from "../helpers/dress.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
+import { createMaterial, deleteMaterial, getAllMaterials, getMaterialById, getMaterialByName, updateMaterial } from "../helpers/material.helper.js";
 
 
 // --------------------------------------measurement config-------------------------------------- //
@@ -123,6 +124,65 @@ export async function removeDress(req, res) {
     try {
         const dress = await deleteDress(req.params.dressId);
         return dress ? success(res, "Dress deleted") : badRequest(res, 'Dress not found');
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+
+// --------------------------------------material-------------------------------------- //
+
+export async function addMaterial(req, res) {
+    try {
+        const nameCheck = await getMaterialByName(req.body.name)
+        if (nameCheck) {
+            return badRequest(res, "Material already exist")
+        }
+        const material = await createMaterial(req.body);
+        return success(res, "Material Added")
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+export async function getAllMaterial(req, res) {
+    try {
+        const materialList = await getAllMaterials();
+        return success(res, "material List", materialList)
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+export async function getMaterialDataById(req, res) {
+    try {
+        const material = await getMaterialById(req.params.materialId);
+        return material ? success(res, "Material Detail", material) : badRequest(res, 'Material not found');
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+export async function changeMaterial(req, res) {
+    try {
+        const nameCheck = await getMaterialByName(req.body.name)
+        if (nameCheck && nameCheck.materialId != req.params.materialId) {
+            return badRequest(res, "Material already exist")
+        }
+        const updatedMaterial = await updateMaterial(
+            req.params.materialId,
+            req.body
+        );
+        return updatedMaterial ? success(res, "Material Updated") : badRequest(res, 'Material not found');
+    } catch (error) {
+        return badRequest(res, error.message)
+    }
+}
+
+export async function removeMaterial(req, res) {
+    try {
+        const deletedMaterial = await deleteMaterial(req.params.materialId);
+        return deletedMaterial ? success(res, "Material Deleted") : badRequest(res, 'Material not found');
     } catch (error) {
         return badRequest(res, error.message)
     }
