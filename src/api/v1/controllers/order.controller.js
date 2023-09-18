@@ -1,5 +1,6 @@
 import { createCustomer, findCustomerById } from "../helpers/customer.helper.js";
 import { getDressById } from "../helpers/dress.helper.js";
+import { getMaterialById } from "../helpers/material.helper.js";
 import { createMeasurements, getMeasurementById } from "../helpers/measurement.helper.js";
 import { createOrder, getAllOrders, orderById, updateOrderPayment, updateOrderStatus } from "../helpers/order.helper.js";
 import { badRequest, success } from "../helpers/response.helper.js";
@@ -16,6 +17,10 @@ export async function createOrderAPI(req, res) {
         paymentData.amount = 0
         let dressList = await Promise.all(dressCollection.map(async dress => {
             const dressData = await getDressById(dress.dressId, true)
+            let materialId = dress.materialId ? await Promise.all(async () => {
+                let materialData = await getMaterialById(dress.materialId)
+                return materialData._id ? materialData._id : null
+            }) : null
             dress.dressId = dressData._id
             dress.customerId = customerId
             paymentData.amount += dress.price
@@ -37,7 +42,7 @@ export async function createOrderAPI(req, res) {
                 return newMeasurement._id
             }
             let newMeasurement = await getMeasurementById(dress.measurementId, true)
-            return newMeasurement._id
+            return { measurementId: newMeasurement._id, materialId }
         }))
         paymentData.amountRemaining = paymentData.amount - paymentData.amountPaid
         let orderData = { customerId, dressList, ...paymentData }

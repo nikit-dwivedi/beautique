@@ -13,10 +13,18 @@ const orderSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'customer',
         },
-        dressList: [{
-            type: Schema.Types.ObjectId,
-            ref: 'measurement',
-        }],
+        dressList: [
+            {
+                measurementId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'measurement',
+                },
+                materialId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'material',
+                    default: null
+                }
+            }],
         orderStatus: {
             type: String,
             enum: ["pending", "in progress", "completed"],
