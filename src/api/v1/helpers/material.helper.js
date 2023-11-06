@@ -30,8 +30,8 @@ export async function getMaterialByName(name) {
 // Read measurement material by Id
 export async function getMaterialById(materialId, need) {
     try {
-        fieldOption = need ? "materialId name price" : "-_id materialId name price"
-        const updatedMaterial = await materialModel.findOne({ materialId, isActive: true }).select("-_id materialId name price");
+        let fieldOption = need ? "materialId name price" : "-_id materialId name price"
+        const updatedMaterial = await materialModel.findOne({ materialId, isActive: true }).select(fieldOption);
         return updatedMaterial;
     } catch (error) {
         console.error(error);

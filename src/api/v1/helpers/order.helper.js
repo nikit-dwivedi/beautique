@@ -6,8 +6,11 @@ export const createOrder = async (orderData) => {
   // Create operation
   try {
     const formattedData = orderFormatter(orderData)
+    console.log("formattedData",formattedData);
     const Order = new orderModel(formattedData);
+    
     const savedOrder = await Order.save();
+    console.log("savedOrder",savedOrder);
     return savedOrder;
   } catch (error) {
     console.error(error);
@@ -26,7 +29,7 @@ export const getAllOrders = async (need) => {
         select: `${opt} -isActive -createdAt -updatedAt -__v`
       })
       .populate({
-        path: "dressList",
+        path: "dressList.measurementId",
         populate: {
           path: 'dressId configList.configId',
           select: `${opt} dressId price name isUnit configId unit`,
@@ -34,9 +37,12 @@ export const getAllOrders = async (need) => {
         select: `${opt} -__v`,
       })
       .populate({
-        path: "dressList.dressId",
+        path: "dressList.materialList.materialId",
         select: `${opt} -__v`
       })
+
+      // console.log(Orders[0].dressList);
+      // console.log(Orders[1].dressList);
     return Orders;
   } catch (error) {
     console.error(error);

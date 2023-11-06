@@ -19,11 +19,17 @@ const orderSchema = new Schema(
                     type: Schema.Types.ObjectId,
                     ref: 'measurement',
                 },
-                materialId: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'material',
-                    default: null
-                }
+                materialList: [{
+                    materialId: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'material',
+                        default: null
+                    },
+                    length: {
+                        type: Number,
+                        default: 0
+                    }
+                }]
             }],
         orderStatus: {
             type: String,
