@@ -4,7 +4,7 @@ const fs = require('fs')
 cloudinary.config({
     cloud_name: 'fablo',
     api_key: '177463258473934',
-    api_secret: 'j6gjkglQfS3Xgk5-WOzWMjvrkuU'
+    api_secret: ''
 });
 
 
