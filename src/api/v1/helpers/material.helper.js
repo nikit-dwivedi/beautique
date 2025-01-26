@@ -54,6 +54,9 @@ export async function materialCheck(IdList) {
 // Read all measurement materials
 export async function getAllMaterials() {
     try {
+
+
+        
         const materials = await materialModel.find({ isActive: true }).select("-_id materialId name price");
         return materials;
     } catch (error) {

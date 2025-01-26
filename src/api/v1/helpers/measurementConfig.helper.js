@@ -53,6 +53,7 @@ export async function configListCheck(IdList) {
 // Read all measurement configs
 export async function getAllMeasurementConfigs() {
     try {
+
         const measurementConfigs = await measurementConfigModel.find({ isActive: true }).select("-_id configId name isUnit unit");
         return measurementConfigs;
     } catch (error) {
